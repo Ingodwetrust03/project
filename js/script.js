@@ -1,28 +1,61 @@
 "use strict"
 
 let title =prompt('Как называется ваш проект?')
-console.log(title)
  let screens = prompt('Какие типы экранов нужно разработать?')
- console.log(screens)
  let screenPrice = +prompt('Сколько будет стоить данная работа?')
- console.log(screenPrice)
  let rollback = 25
-
  let adaptive = Boolean(prompt('Нужен ли адаптив на сайте?'))
- console.log(adaptive)
 let service1 = prompt('Какой дополнительный тип услуги нужен?')
-console.log(service1)
 let servicePrice1 = +prompt('Сколько это будет стоить?')
-console.log(servicePrice1)
 let service2 = prompt('Какой дополнительный тип услуги нужен?')
-console.log(service2)
 let servicePrice2 = +prompt('Сколько это будет стоить?')
-console.log(servicePrice2)
 let fullPrice = screenPrice + servicePrice1 + servicePrice2
-console.log(fullPrice)
 
-let servicePercentPrice = parseFloat(fullPrice - fullPrice * (rollback/100))
-console.log(servicePercentPrice)
+
+
+const allServicePrices = function getAllServicePrices(){
+    return servicePrice1 + servicePrice2
+    }
+
+
+function getFullPrice(){
+    return screenPrice + allServicePrices()
+}
+
+fullPrice = getFullPrice()
+
+
+
+const getTitle = function(){
+    let bigFirstLetter, titleArrayToString
+    let titleToLow =  title.toLowerCase()
+    let titleArray = titleToLow.split('')
+ 
+
+    
+    function makeBigFirstLetter(){
+        bigFirstLetter = titleArray[0].toUpperCase()
+        titleArray.shift();
+        titleArray.unshift(bigFirstLetter)
+        titleArrayToString = titleArray.join('')
+        console.log(titleArrayToString) 
+    }
+
+    if(titleArray[0] == ' '){
+        titleArray.splice(0, 1)
+        makeBigFirstLetter()
+    } else {
+        makeBigFirstLetter()
+    } 
+
+    
+}
+
+
+const servicePercentPrice = function getServicePercentPrices(){
+        return parseFloat(fullPrice - fullPrice * (rollback/100))
+    
+}
 
 
 
@@ -50,7 +83,11 @@ switch (true){
 
 
 
+getTitle()
 
 
 
- 
+console.log(allServicePrices())
+console.log(fullPrice)
+console.log(servicePercentPrice())
+
