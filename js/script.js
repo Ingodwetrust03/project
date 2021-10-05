@@ -90,4 +90,5 @@ getTitle()
 console.log(allServicePrices())
 console.log(fullPrice)
 console.log(servicePercentPrice())
+console.log(screens.split(''))
 
