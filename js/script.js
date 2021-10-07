@@ -4,8 +4,9 @@
 let rollback = 25
 
 let title, screens, screenPrice, servicePercentPrice, allServicePrices, service1, servicePrice1, service2, servicePrice2,adaptive, fullPrice
+let getScreenPrice = 0
+let getAddServiceSum 
 
- 
 
 const isNumber = function(num){
     return !isNaN(parseFloat(num)) && isFinite(num)
@@ -19,24 +20,25 @@ const showTypeOf = function(variable){
  
 
 const questions = function(){
-    let getScreenPrice = 0
 
 title =prompt('Как называется ваш проект?', 'проект')
 screens = prompt('Какие типы экранов нужно разработать?', 'сложные')
 
-do {
-    screenPrice = +prompt('Сколько будет стоить данная работа?')
-} while(!isNumber(screenPrice))
- 
-getScreenPrice = screenPrice
+    do { 
+        screenPrice = prompt('Сколько будет стоить данная работа?')
+    } while(!isNumber(screenPrice))
+    getScreenPrice = +screenPrice
 
+console.log(typeof getScreenPrice)
 adaptive = confirm('Нужен ли адаптив на сайте?')
+
+return getScreenPrice
  }
 
  
 
  const getAllServicePrices = function (){
-let sum =0
+    let sum =0
     for (let i=0; i<2; i++){
         if (i===0){
             service1 = prompt('Какой дополнительный тип услуги нужен?') 
@@ -44,14 +46,19 @@ let sum =0
             service2 = prompt('Какой дополнительный тип услуги нужен?')  
         }
 
-do {
-    sum = +prompt('Сколько будет стоить данная работа?')
-    console.log(sum)
-} while(!isNumber(screenPrice))
-    sum += +sum
-    }
-    return sum
+
+ do  {
+    sum = prompt('Сколько будет стоить данная работа?')   
+} while(!isNumber(sum))
+getAddServiceSum = +sum 
+    getAddServiceSum += getAddServiceSum
 }
+
+console.log(getAddServiceSum)
+
+    return getAddServiceSum
+}
+ 
 
     
 
@@ -80,7 +87,7 @@ function makeBigFirstLetter(){
  
 
 const getFullPrice = function(){
-    return screenPrice + allServicePrices
+    return getScreenPrice + allServicePrices
 }
  
 
@@ -120,11 +127,11 @@ function showMessage(){
 
 
 questions()
-title = getTitle()
 allServicePrices = getAllServicePrices()
 fullPrice = getFullPrice()
 servicePercentPrice = getServicePercentPrices()
 showMessage()
+title = getTitle()
 
 
 showTypeOf(title)
