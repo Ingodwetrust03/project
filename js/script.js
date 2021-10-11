@@ -4,12 +4,11 @@
 const appData = {
     rollback: 25,
     title: '',
-    screens: '',
+    screens: [],
     screenPrice: 0,
     servicePercentPrice: 0,
     allServicePrices: 0,
-    service1: '',
-    service2: '',
+    services: {},
     adaptive: true,
     fullPrice: 0,
     getScreenPrice: '',
@@ -20,50 +19,73 @@ const appData = {
     titleToLow: '',
     titleArray: [],
 
+    
+    isNumber: function(num){
+    return !isNaN(parseFloat(num)) && isFinite(num)
+},
+
     questions: function(){
 
-        appData.title =prompt('Как называется ваш проект?', 'проект')
-        appData.screens = prompt('Какие типы экранов нужно разработать?', 'сложные')
+        do {
+            appData.title =prompt('Как называется ваш проект?', 'Калькулятор верстки')
+        } while (appData.isNumber(appData.title))
+     
+        for (let i=0; i<2; i++){
+            let name 
+            do{
+                name = prompt('Какие типы экранов нужно разработать?')  
+            }while(appData.isNumber(name))
+
+
+            let price = 0
+            do{
+                price = prompt('Сколько будет стоить данная работа?')
+            } while(!appData.isNumber(price))
+            
+            appData.screens.push({id: i, name: name + '_id' + i, price: price})
+        }
+      
         
-            do { 
-                appData.screenPrice = prompt('Сколько будет стоить данная работа?')
-            } while(!isNumber(appData.screenPrice))
-            appData.getScreenPrice = +appData.screenPrice
+           
+        for (let i=0; i<2; i++){
+            let name 
+            do{
+                name = prompt('Какой дополнительный тип услуги нужен?')
+            }while(appData.isNumber(name))
+            let price = 0
+
+     do  {
+        price = prompt('Сколько будет стоить данная работа?')   
+    } while(!appData.isNumber(price))
+
+    appData.services[name] = +price
+    }
+
+    appData.adaptive = confirm('Нужен ли адаптив на сайте?')
         
-        console.log(typeof appData.getScreenPrice)
-        appData.adaptive = confirm('Нужен ли адаптив на сайте?')
+         },
+   
+         addPrices: function(){
+            /*appData.screenPrice = appData.screens.reduce(function(){
+                return  appData.screenPrice += +appData.screens.price
+            }, 0)*/
+           
+            for(let screen of appData.screens){
+                appData.screenPrice += +screen.price
+            }
+
+            for(let key in appData.services){
+                appData.allServicePrices +=  appData.services[key]
+            }
         
-        return appData.getScreenPrice
          },
 
-    getAllServicePrices: function (){
-            let sum =0
-            for (let i=0; i<2; i++){
-                if (i===0){
-                    appData.service1 = prompt('Какой дополнительный тип услуги нужен?') 
-                } else if(i===1) {
-                    appData.service2 = prompt('Какой дополнительный тип услуги нужен?')  
-                }
-        
-        
-         do  {
-            sum = prompt('Сколько будет стоить данная работа?')   
-        } while(!isNumber(sum))
-        appData.getAddServiceSum = +sum 
-        appData.getAddServiceSum += appData.getAddServiceSum
-        }
-        
-        console.log(appData.getAddServiceSum)
-        
-            return appData.getAddServiceSum
-        },
-
     getFullPrice: function(){
-    return appData.getScreenPrice + appData.allServicePrices
+        appData.fullPrice =  appData.getScreenPrice + appData.allServicePrices
 },
  
     getServicePercentPrices: function(){
-        return parseFloat(appData.fullPrice - (appData.fullPrice * (appData.rollback/100)))
+        appData.servicePercentPrice =  parseFloat(appData.fullPrice - (appData.fullPrice * (appData.rollback/100)))
 },
 
    showMessage: function (){
@@ -100,7 +122,7 @@ const appData = {
         appData.titleArray.unshift(appData.bigFirstLetter)
         appData.titleArrayToString = appData.titleArray.join('')
         appData.title = appData.titleArrayToString
-            return appData.title 
+        appData.title =  appData.title 
         }
     
         if(appData.titleArray[0] == ' '){
@@ -112,34 +134,21 @@ const appData = {
     }, 
 
    logger: function(){
-    for (let key in appData){
-    console.log(key + ': ' +appData[key])
-    }
-},
+    console.log(appData.screens)
+console.log("Стоимость верстки экранов " + appData.screenPrice + ' рублей/ долларов/гривен/юани')
+console.log('Стоимость разработки сайта' + ' ' + appData.fullPrice + ' ' + 'рублей/ долларов/гривен/юани')
+    },
 
     start: function(){
     appData.questions()
-    appData.allServicePrices = appData.getAllServicePrices()
-    appData.fullPrice = appData.getFullPrice()
-    appData.servicePercentPrice = appData.getServicePercentPrices()
+    appData.addPrices()
+    appData.getFullPrice()
+    appData.getServicePercentPrices()
     appData.showMessage()
-    appData.title = appData.getTitle()
-    appData.logMessage = appData.logger()
+    appData.getTitle()
+    appData.logger()
  },
-
-
 }
-
-const isNumber = function(num){
-    return !isNaN(parseFloat(num)) && isFinite(num)
-}
-
-/* function getTitle(){
-    return appData.title.trim()[0].toUpperCase()+ appData.title.trim().substr(1).toLowerCase
-} */
-
-
- 
 
 
 appData.start()
@@ -147,6 +156,13 @@ appData.start()
 
 
 
-console.log(appData.servicePercentPrice)
-console.log("Стоимость верстки экранов " + appData.screenPrice + ' рублей/ долларов/гривен/юани')
-console.log('Стоимость разработки сайта' + ' ' + appData.fullPrice + ' ' + 'рублей/ долларов/гривен/юани')
+
+
+/* function getTitle(){
+    return appData.title.trim()[0].toUpperCase()+ appData.title.trim().substr(1).toLowerCase
+} */
+
+
+
+
+
