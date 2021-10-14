@@ -129,6 +129,4 @@ const appData = {
 appData.start()
 
 
-	/* function getTitle(){
-	    return appData.title.trim()[0].toUpperCase()+ appData.title.trim().substr(1).toLowerCase
-	} */
+
