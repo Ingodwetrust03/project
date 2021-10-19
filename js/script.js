@@ -85,7 +85,13 @@ const appData = {
         range.addEventListener('input', function(e){
         rangeValue.textContent = e.target.value + '%'
         appData.rollback = e.target.value
-        })       
+
+        if(!totalCountRollback.value == 0){
+            totalCountRollback.value = appData.fullPrice - (appData.fullPrice * appData.rollback / 100)
+            }
+        })  
+
+    
     },
   
     start: function() {
@@ -162,6 +168,8 @@ const appData = {
         for(let key of  appData.screens){
             appData.screensCounter += +key.count
         }
+
+  
         
 	},
 
