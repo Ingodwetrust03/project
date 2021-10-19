@@ -191,7 +191,6 @@ const appData = {
 	},
 	
 	logger: function() {
-        console.log(appData.screenPrice)
 		console.log(appData.screens)
 		console.log("Стоимость верстки экранов " + appData.screenPrice + ' рублей/ долларов/гривен/юани')
 		console.log('Стоимость разработки сайта' + ' ' + appData.fullPrice + ' ' + 'рублей/ долларов/гривен/юани')
