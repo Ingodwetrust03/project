@@ -15,7 +15,6 @@ let range = document.querySelector('input[type=range')
 let rangeValue = document.querySelector('.range-value')
 let fullPrice
 let fullPriceWithRollback 
-let rollback
 let screensCounter
 
 
@@ -33,64 +32,61 @@ const appData = {
 	getAddServiceSum: 0,
     fullPrice: 0,
     fullPriceWithRollback: 0,
-    rollback: 0,
     screensCounter: 0,
+    rollback:0,
 
   
     init: function(){
         startBtn.disabled = true
         appData.addTitle()
         appData.check()
-        appData.rollback()
-        startBtn.addEventListener('click', function(){
-            appData.check()
-            appData.start()
-            })
-            
-        buttonPlus.addEventListener('click', function(){
-            appData.addScreenBlock()
-            appData.check()
-        })
+        appData.rollbackCounter()
+        startBtn.addEventListener('mouseenter', appData.check)
+        startBtn.addEventListener('click', appData.start)
+        buttonPlus.addEventListener('click', appData.addScreenBlock)
     },
+
     addScreenBlock: function(){
         const cloneScreen = screens[0].cloneNode(true)
         screens[screens.length-1].after(cloneScreen)
-        console.log(cloneScreen)
     },
+
     addTitle: function(){
         document.title = title.textContent
     },
+
     check: function(){
         let firstElementBlock = document.querySelectorAll('.element')[0]
         let firstElementBlockInputsArr = firstElementBlock.querySelectorAll('input')
         let firstElementBlockSelectsArr = firstElementBlock.querySelectorAll('select')
         let screensInputsArray = [...firstElementBlockInputsArr, ...firstElementBlockSelectsArr]
-        console.log(screensInputsArray)
-
+        console.dir(screensInputsArray)
        
         screensInputsArray.forEach(function(item){
         item.addEventListener('input', function(){
-            if(item.value === '' ){
+            if(!item.value.trim()){
             startBtn.disabled = true
-            console.log('true')
+            console.log(item.value)
         } else {
             startBtn.disabled = false
-            console.log('false')
+            console.log(item.value)
         }
+    })  
     })
-})
 
-},
+        for(let key of  screensInputsArray){
+            if(!key.value.trim() || key.value === undefined){
+            startBtn.disabled = true
+        } 
+    }
+    },
 
-rollback: function(){
-    range.addEventListener('input', function(e){
+    rollbackCounter: function(){
+        range.addEventListener('input', function(e){
         rangeValue.textContent = e.target.value + '%'
         appData.rollback = e.target.value
-            console.log(appData.rollback)
-        }) 
-      
-       
-},
+        })       
+    },
   
     start: function() {
         appData.addScreens()
@@ -98,13 +94,8 @@ rollback: function(){
         appData.addPrices()
         console.log(appData)
         appData.showResult()
-		
-		/* appData.addPrices()
-
-		appData.showMessage()
-
-		appData.logger()*/
 	},
+
     showResult: function(){
         total.value = appData.screenPrice
         totalCountOther.value = appData.servicePricesPercent + appData.servicePricesNumber
@@ -112,6 +103,7 @@ rollback: function(){
         totalCountRollback.value = appData.fullPriceWithRollback
         totalCount.value = appData.screensCounter
     },
+
     addScreens: function(){
         screens = document.querySelectorAll('.screen')
         screens.forEach(function(screen, index){
@@ -130,6 +122,7 @@ rollback: function(){
         })
         
     },
+
     addServices: function(){
         otherItemsPercent.forEach(function(item){
             const check = item.querySelector('input[type=checkbox]')
@@ -163,11 +156,11 @@ rollback: function(){
 			appData.servicePricesPercent += appData.screenPrice * (appData.servicesPercent[key] / 100)
 		}
         appData.fullPrice = appData.screenPrice + appData.servicePricesPercent + appData.servicePricesNumber
+        
         appData.fullPriceWithRollback = appData.fullPrice - (appData.fullPrice * appData.rollback / 100)
-        for(let k of  appData.screens){
-            appData.screensCounter += +k.count
-            console.log(screensCounter)
-            console.log(k.count)
+        
+        for(let key of  appData.screens){
+            appData.screensCounter += +key.count
         }
         
 	},
@@ -204,6 +197,7 @@ rollback: function(){
 	},
 	
 }
+
 appData.init()
 
 
