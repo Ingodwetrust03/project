@@ -57,6 +57,8 @@ const appData = {
 		resetBtn.addEventListener('click', this.reset)
 		buttonPlus.addEventListener('click', this.addScreenBlock)
 	},
+
+    
 	addScreenBlock: function() {
 		screens = document.querySelectorAll('.screen')
 		const cloneScreen = screens[screens.length - 1].cloneNode(true)
