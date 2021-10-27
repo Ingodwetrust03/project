@@ -2,6 +2,7 @@
 const title = document.getElementsByTagName('h1')[0]
 const startBtn = document.getElementsByClassName('handler_btn')[0]
 let screens = document.querySelectorAll('.screen')
+let screensFirst = document.querySelector('.screen:first-child')
 const buttonPlus = document.querySelector('.screen-btn')
 const otherItemsPercent = document.querySelectorAll('.other-items.percent')
 const otherItemsNumber = document.querySelectorAll('.other-items.number')
@@ -22,6 +23,8 @@ let cmsCheckBox = document.getElementById('cms-open')
 let cmsVariants = document.querySelector('.hidden-cms-variants')
 let checkboxes = document.querySelectorAll('input[type=checkbox]')
 let cmsOptionOther = document.getElementById('cms-other-input')
+let screensBlock = document.querySelector('.main-controls__views:first-child')
+
 const appData = {
 	rollback: 25,
 	title: '',
@@ -52,17 +55,24 @@ const appData = {
 		startBtn.addEventListener('click', () => {
 			this.start()
 			this.disableInputs()
-			console.log(this.fullPriceWithCmsPercent)
 		})
-		resetBtn.addEventListener('click', this.reset)
+		resetBtn.addEventListener('click', () => {
+			this.reset()
+		})
 		buttonPlus.addEventListener('click', this.addScreenBlock)
 	},
 
     
 	addScreenBlock: function() {
-		screens = document.querySelectorAll('.screen')
-		const cloneScreen = screens[screens.length - 1].cloneNode(true)
-		screens[screens.length - 1].after(cloneScreen)
+		if(screens.length <= 18){
+			screens = document.querySelectorAll('.screen')
+			const cloneScreen = screens[screens.length - 1].cloneNode(true)
+			cloneScreen.classList.add('clone')
+			screens[screens.length - 1].after(cloneScreen)
+		} else {
+			buttonPlus.disabled = true
+		}
+		
 	},
 	addTitle: function() {
 		document.title = title.textContent
@@ -120,24 +130,35 @@ const appData = {
 		cmsVariantsInputs.forEach((item) => {
 			item.disabled = false
 		})
-		let screenBlockInputs = []
-		screens.forEach((screen) => {
-			let screenInputs = screen.querySelectorAll('input[type=text], select')
-			let screenInputsSelect = screen.querySelector('input[type=text]')
-			screenBlockInputs.push(screenInputsSelect)
-			screenInputs.forEach((input) => {
-				input.disabled = false
-			})
-		})
+
+		for (let i=1; i <= screens.length; i++){
+			console.log(screens[i])
+			if (!screens[i]) {
+				continue
+			}
+			 screens[i].remove()
+			} 
+
+			screensBlock.querySelector('input').disabled = false
+			screensBlock.querySelector('input').value = ''
+			let screenSelect = screensBlock.querySelector('select')
+			screenSelect.disabled = false
+			screenSelect.selectedIndex = 0
+			
 		totalBlockInputs.forEach((item) => {
-			screenBlockInputs.push(item)
-		})
-		screenBlockInputs.forEach((item) => {
 			item.value = ''
 		})
+		
+		this.screens.length = ''
+		totalCount.value = ''
+		this.screensCounter = 0
+		this.screenPrice = 0
+
+		console.log(totalCount.value)
+		console.log(appData)
+
 		startBtn.style.display = 'flex'
 		resetBtn.style.display = 'none'
-		console.log(screens)
 	},
 	rollbackCounter: function() {
 		range.addEventListener('input', (e) => {
@@ -180,9 +201,8 @@ const appData = {
 		totalCount.value = this.screensCounter
 	},
 	addScreens: function() {
-		screens = []
 		screens = document.querySelectorAll('.screen')
-		console.log(screens)
+
 		screens.forEach((screen, index) => {
 			const select = screen.querySelector('select')
 			const input = screen.querySelector('input')
@@ -226,8 +246,9 @@ const appData = {
 		this.fullPrice = this.screenPrice + this.servicePricesPercent + this.servicePricesNumber
 		this.fullPriceWithCmsPercent = this.fullPrice + this.fullPrice * (+cmsOptionOther.value / 100)
 		this.fullPriceWithRollback = this.fullPriceWithCmsPercent - (this.fullPriceWithCmsPercent * this.rollback / 100)
-		for(let key of this.screens) {
-			this.screensCounter += +key.count
+		
+		for(let screen of this.screens) {
+			this.screensCounter += +screen.count
 		}
 	},
 	showMessage: function() {
